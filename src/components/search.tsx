@@ -2,6 +2,7 @@
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 export default function Search() {
     const router = useRouter();
@@ -18,8 +19,13 @@ export default function Search() {
     };
 
     return (
-        <form className="w-full items-center justify-center pt-5" onSubmit={handleSubmit}>
-            <Input type="number" placeholder="Phone Number" />
+        <form className="w-full items-center justify-center  pt-5" onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-2 sm:flex-row">
+                <Input className="flex-[6]" type="number" placeholder="Phone Number" />
+                <Button className="flex-[1]" variant="secondary">
+                    Search
+                </Button>
+            </div>
             {errorMessage && <small className="text-red-500">{errorMessage}</small>}
         </form>
     );
