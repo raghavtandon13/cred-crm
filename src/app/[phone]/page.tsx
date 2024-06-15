@@ -6,14 +6,18 @@ import Search from '@/components/search';
 async function getData(phone: string): Promise<any> {
     try {
         const hello = await User.find({ phone: phone }).lean();
-        const { accounts, ...details } = hello[0];
-        if (accounts === undefined || details === undefined) {
-            return;
+        let res: any = {};
+        if (hello[0] && hello[0].accounts) {
+            const { accounts, ...details } = hello[0];
+            if (accounts !== undefined && details !== undefined) {
+                res.accounts = accounts;
+                res.details = details;
+            }
         }
-        return { accounts, details };
+        return res;
     } catch (error) {
-        console.log(error);
-        return 'Error Occured';
+        console.log('Error:', error);
+        return 'Error Occurred';
     }
 }
 
@@ -22,21 +26,21 @@ export default async function Phone({ params }: { params: { phone: string } }) {
     if (params.phone) {
         phone = params.phone.toString();
     }
-    const { accounts, details } = await getData(phone);
+    const res = await getData(phone);
     return (
         <main className="flex min-h-screen flex-col items-stretch p-10 px-5 md:p-20 md:px-40">
             <div className="flex h-20 w-full items-end justify-between">
                 <h1 className="text-2xl font-bold">DATABASE</h1>
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />
             </div>
-            <Search />
-            {accounts && details ? (
+            <Search phone={phone} />
+            {res.accounts && res.details ? (
                 <>
                     <div className="items-center justify-center">
                         <h1 className="py-10 font-bold">Personal Details</h1>
                         <Table>
                             <TableBody>
-                                {Object.entries(details)
+                                {Object.entries(res.details)
                                     .filter(
                                         ([key]) =>
                                             ![
@@ -62,14 +66,14 @@ export default async function Phone({ params }: { params: { phone: string } }) {
 
                                 <TableRow>
                                     <TableCell className="font-medium">Total Accounts</TableCell>
-                                    <TableCell className="text-right">{accounts.length}</TableCell>
+                                    <TableCell className="text-right">{res.accounts.length}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
                     </div>
 
                     <h1 className="py-10 font-bold">Account Details</h1>
-                    {accounts.map((account: any, index: any) => (
+                    {res.accounts.map((account: any, index: any) => (
                         <div key={index} className="items-center justify-center pb-10">
                             <h1 className="text-l w-full text-center font-semibold">{account.name}</h1>
                             <Table>
