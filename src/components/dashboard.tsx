@@ -7,7 +7,7 @@ async function getData(dates: any): Promise<any> {
         const end = dates.dates.end;
         const pipeline = [];
 
-        if (start !== undefined && end !== undefined) {
+        if (start !== "" && end !== "") {
             pipeline.push({
                 $match: { updatedAt: { $gte: new Date(start), $lt: new Date(end) } },
             });
