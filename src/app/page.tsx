@@ -3,8 +3,15 @@ import Search from '@/components/search';
 import Date from '@/components/date';
 import Dashboard from '@/components/dashboard';
 
-
 export default async function Home(searchParams: any) {
+    let dateprops: any = {};
+    if (searchParams.searchParams.start && searchParams.searchParams.end) {
+        dateprops.start = searchParams.searchParams.start;
+        dateprops.end = searchParams.searchParams.end;
+    } else {
+        dateprops.start = '1970-01-01';
+        dateprops.end = '2030-01-01';
+    }
     return (
         <main className="flex min-h-screen flex-col items-stretch p-10 px-5 md:p-20 md:px-40">
             <div className="flex h-20 w-full items-end justify-between">
@@ -21,8 +28,8 @@ export default async function Home(searchParams: any) {
                     </>
                 ) : null}
             </h1>
-	    <Date />
-            <Dashboard dates={{ start: searchParams.searchParams.start, end: searchParams.searchParams.end }} />
+            <Date />
+            <Dashboard dates={dateprops} />
         </main>
     );
 }
