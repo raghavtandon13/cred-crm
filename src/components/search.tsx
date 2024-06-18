@@ -1,15 +1,13 @@
 'use client';
 import { Input } from '@/components/ui/input';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
 export default function Search({ phone }: { phone: string }) {
-    const router = useRouter();
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
         const phoneNumber = e.target[0].value;
-        router.push(`/${phoneNumber}`);
+        window.location.href = `/${phoneNumber}`;
     };
 
     return (

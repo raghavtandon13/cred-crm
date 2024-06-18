@@ -1,17 +1,17 @@
 'use client';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-export default function Date() {
-    const router = useRouter();
+export default function Date({ dates }: any) {
+    const initialStartDate = dates.start === '1970-01-01' ? '' : dates.start;
+    const initialEndDate = dates.end === '2030-01-01' ? '' : dates.end;
 
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [startDate, setStartDate] = useState(initialStartDate);
+    const [endDate, setEndDate] = useState(initialEndDate);
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        router.push(`?start=${startDate}&end=${endDate}`);
+        window.location.href = `/?start=${startDate}&end=${endDate}`;
     };
 
     return (
@@ -20,14 +20,14 @@ export default function Date() {
                 <div className="flex flex-[6] flex-col gap-2 sm:flex-row">
                     <input
                         type="date"
-                        className=" rounded px-2 outline outline-[1px] outline-gray-300"
+                        className="rounded px-2 outline outline-[1px] outline-gray-300"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
                         name="start"
                     />
                     <input
                         type="date"
-                        className=" rounded px-2 outline outline-[1px] outline-gray-300"
+                        className="rounded px-2 outline outline-[1px] outline-gray-300"
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
                         name="end"

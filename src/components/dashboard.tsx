@@ -1,23 +1,26 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import BarLoader from 'react-spinners/BarLoader';
 
 const Dashboard = ({ dates }: any) => {
     const [data, setData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
-                const response = await fetch('/api/', {
+                const response = await fetch('https://credmantra.com/api/v1/crm/stats', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ dates }),
                 });
                 const result = await response.json();
+                setLoading(false);
                 setData(result);
+
                 console.log('data:', data);
             } catch (err) {
                 setError('Failed to fetch data');
@@ -32,7 +35,11 @@ const Dashboard = ({ dates }: any) => {
     }
 
     if (!data) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex w-full items-center justify-center py-2 sm:py-8">
+                <BarLoader loading={loading} aria-label="Loading Spinner" />
+            </div>
+        );
     }
 
     return (
