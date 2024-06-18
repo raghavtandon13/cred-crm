@@ -3,9 +3,8 @@ import Search from '@/components/search';
 import Date from '@/components/date';
 import Dashboard from '@/components/dashboard';
 
-type DateProps = { start: string; end: string };
 
-export default async function Home(searchParams: DateProps) {
+export default async function Home(searchParams: any) {
     return (
         <main className="flex min-h-screen flex-col items-stretch p-10 px-5 md:p-20 md:px-40">
             <div className="flex h-20 w-full items-end justify-between">
