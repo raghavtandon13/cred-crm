@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Search from '@/components/search';
 import Date from '@/components/date';
-import Dashboard from '@/components/dashboard';
+// import Dashboard from '@/components/dashboard';
 
 
 export default async function Home(searchParams: any) {
@@ -22,7 +22,7 @@ export default async function Home(searchParams: any) {
                 ) : null}
             </h1>
 	    <Date />
-            <Dashboard dates={{ start: searchParams.searchParams.start, end: searchParams.searchParams.end }} />
         </main>
     );
 }
+// <Dashboard dates={{ start: searchParams.searchParams.start, end: searchParams.searchParams.end }} />
