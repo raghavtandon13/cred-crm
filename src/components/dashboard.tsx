@@ -36,8 +36,9 @@ const Dashboard = ({ dates }: any) => {
 
     if (!data) {
         return (
-            <div className="flex w-full items-center justify-center py-2 sm:py-8">
+            <div className="flex w-full flex-col items-center justify-center py-2 sm:py-8">
                 <BarLoader loading={loading} aria-label="Loading Spinner" />
+		<p className='pt-2'>aggregating... please wait</p>
             </div>
         );
     }
