@@ -11,7 +11,11 @@ export default function Date({ dates }: any) {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        window.location.href = `/?start=${startDate}&end=${endDate}`;
+	console.log("ok")
+        console.log(window.location.href);
+	console.log("ok")
+
+        window.location.href = `?start=${startDate}&end=${endDate}`;
     };
 
     return (
