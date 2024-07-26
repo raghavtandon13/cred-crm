@@ -69,7 +69,7 @@ const Dashboard = ({ dates }: any) => {
             <Table>
                 <TableBody>
                     {Object.entries(data.data)
-                        .filter(([key]) => key !== 'active')
+                        .filter(([key]) => key !== 'active' && key !== 'null')
                         .map(
                             ([key, value]: any) =>
                                 value && (
@@ -85,14 +85,16 @@ const Dashboard = ({ dates }: any) => {
 
             <div className="flex items-center justify-start">
                 {data.lastAggregatedAt && (
-                    <p className="text-sm text-gray-500">
-                        Last aggregated at:
-                        {data.cached ? new Date(data.lastAggregatedAt).toLocaleString() : 'Right Now'}
-                    </p>
+                    <>
+                        <p className="text-sm text-gray-500">
+                            Last aggregated at:
+                            {data.cached ? new Date(data.lastAggregatedAt).toLocaleString() : 'Right Now'}
+                        </p>
+                        <Button size={'icon'} className="ml-1" variant={'ghost'} onClick={handleRefresh}>
+                            <RefreshCw size={16} />
+                        </Button>
+                    </>
                 )}
-                <Button size={'icon'} className="ml-1" variant={'ghost'} onClick={handleRefresh}>
-                    <RefreshCw size={16} />
-                </Button>
             </div>
         </div>
     );
