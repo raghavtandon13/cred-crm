@@ -18,11 +18,11 @@ export default async function Home(searchParams: any) {
     return (
         <main className="flex min-h-screen flex-col items-stretch p-10 px-5 md:p-20 md:px-40">
             <div className="flex h-20 w-full items-end justify-between">
-                <Link href="/" className="text-2xl font-bold">
-                    <Button className="ml-[-1rem] text-2xl font-bold" variant={'link'}>
+                <Button asChild className="ml-[-1rem] text-2xl font-bold" variant={'link'}>
+                    <Link href="/" className="text-2xl font-bold">
                         DATABASE
-                    </Button>
-                </Link>
+                    </Link>
+                </Button>
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />
             </div>
             <Search phone="" />
@@ -30,7 +30,7 @@ export default async function Home(searchParams: any) {
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <Button className="ml-[-1rem] text-2xl font-bold" variant={'link'}>
+                            <Button asChild className="ml-[-1rem] text-2xl font-bold" variant={'link'}>
                                 <Link href="/full">DASHBOARD</Link>
                             </Button>
                         </TooltipTrigger>
