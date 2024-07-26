@@ -15,7 +15,7 @@ const Dashboard = ({ dates }: any) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch('http://localhost:3000/api/v1/crm/stats', {
+                const response = await fetch('https://credmantra.com/api/v1/crm/stats', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ dates, forceRefresh }),
