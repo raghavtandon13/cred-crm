@@ -44,27 +44,29 @@ const Countboard = ({ dates }: any) => {
     }
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-0 sm:p-4">
             <Table>
                 <TableRow>
                     <TableCell className="font-semibold">Name</TableCell>
                     <TableCell className="font-semibold">Total</TableCell>
                     <TableCell className="font-semibold">Accepted</TableCell>
                     <TableCell className="font-semibold">Rejected</TableCell>
-                    <TableCell className="font-semibold">First Lead</TableCell>
-                    <TableCell className="font-semibold">Last Lead</TableCell>
+                    <TableCell className="min-w-[120px] font-semibold">First Lead</TableCell>
+                    <TableCell className="min-w-[120px] font-semibold">Last Lead</TableCell>
                 </TableRow>
                 <TableBody>
-                    {Object.entries(data).map(([key, value]: any) => (
-                        <TableRow key={key}>
-                            <TableCell className="font-semibold">{key}</TableCell>
-                            <TableCell>{value.Total}</TableCell>
-                            <TableCell>{value.Accepted}</TableCell>
-                            <TableCell>{value.Rejected}</TableCell>
-                            <TableCell>{value.First}</TableCell>
-                            <TableCell>{value.Last}</TableCell>
-                        </TableRow>
-                    ))}
+                    {Object.entries(data)
+                        .filter(([key]) => key !== 'null')
+                        .map(([key, value]: any) => (
+                            <TableRow key={key}>
+                                <TableCell className="font-semibold">{key}</TableCell>
+                                <TableCell>{value.Total}</TableCell>
+                                <TableCell>{value.Accepted}</TableCell>
+                                <TableCell>{value.Rejected}</TableCell>
+                                <TableCell>{value.First}</TableCell>
+                                <TableCell>{value.Last}</TableCell>
+                            </TableRow>
+                        ))}
                 </TableBody>
             </Table>
         </div>

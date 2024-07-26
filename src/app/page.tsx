@@ -26,7 +26,7 @@ export default async function Home(searchParams: any) {
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />
             </div>
             <Search phone="" />
-            <h1 className="flex items-stretch py-5 text-2xl font-bold sm:flex-row sm:items-center">
+            <h1 className="flex flex-col items-start py-5 text-2xl font-bold sm:flex-row sm:items-center">
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
@@ -34,7 +34,7 @@ export default async function Home(searchParams: any) {
                                 <Link href="/full">DASHBOARD</Link>
                             </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
+                        <TooltipContent side="right">
                             <p>SHOW FULL DETAILS</p>
                         </TooltipContent>
                     </Tooltip>

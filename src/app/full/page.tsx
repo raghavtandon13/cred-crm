@@ -42,7 +42,7 @@ export default function Full({ searchParams }: FullProps) {
                                 </Button>
                             </Link>
                         </TooltipTrigger>
-                        <TooltipContent>
+                        <TooltipContent side='right'>
                             <p>SHOW LESS DETAILS</p>
                         </TooltipContent>
                     </Tooltip>
