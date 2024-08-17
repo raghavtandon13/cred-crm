@@ -44,20 +44,24 @@ const Countboard = ({ dates }: any) => {
         return (
             <div className="flex w-full flex-col items-center justify-center py-2 sm:py-8">
                 <BarLoader loading={loading} aria-label="Loading Spinner" />
-                <p className="pt-2">aggregating... please wait</p>
+                <p className="pt-2">Aggregating... please wait</p>
             </div>
         );
     }
 
     if (error) {
-        return <div>Error:{error}</div>;
+        return (
+            <div className="flex w-full flex-col items-center justify-center py-2 sm:py-8">
+                <h1>Aggration Failed</h1>
+            </div>
+        );
     }
 
     if (!data) {
         return (
             <div className="flex w-full flex-col items-center justify-center py-2 sm:py-8">
                 <BarLoader loading={loading} aria-label="Loading Spinner" />
-                <p className="pt-2">aggregating... please wait</p>
+                <p className="pt-2">Aggregating... please wait</p>
             </div>
         );
     }
