@@ -35,7 +35,7 @@ export default async function Phone({ params }: { params: { phone: string } }) {
                         DATABASE
                     </a>
 
-                    <a a href={`/mv/${phone}`} className="ml-10 pointer text-sm font-bold">
+                    <a href={`/mv/${phone}`} className="ml-10 pointer text-sm font-bold">
                         MV STATUS -&gt;
                     </a>
                 </div>
