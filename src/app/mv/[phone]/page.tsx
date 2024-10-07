@@ -1,18 +1,19 @@
 import Image from 'next/image';
 import User from '@/lib/models/user.model';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 
 async function findMoneyViewId(phone: string): Promise<any> {
     try {
-        const userArray = await User.find({ phone:phone });
-	const user = userArray[0]
-	console.log(user)
+        const userArray = await User.find({ phone: phone });
+        const user = userArray[0];
+        console.log(user);
         if (!user || !user.accounts) {
             console.log('User or user accounts not found');
             return null;
         }
 
         const moneyViewAccount = user.accounts.find((account: any) => account.name === 'MoneyView');
-	console.log(moneyViewAccount)
+        console.log(moneyViewAccount);
         if (!moneyViewAccount) {
             console.log('MoneyView account not found');
             return null;
@@ -53,7 +54,6 @@ async function findMoneyViewId(phone: string): Promise<any> {
         const leadStatusData = await leadStatusResponse.json();
         console.log('Lead status data:', leadStatusData);
         return leadStatusData;
-
     } catch (error) {
         console.error('Error in findMoneyViewId:', error);
         throw error; // Re-throw the error to be handled by the caller
@@ -84,11 +84,26 @@ export default async function Phone({ params }: { params: { phone: string } }) {
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />
             </div>
             {error ? (
-                <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                    Error: {error}
-                </div>
+                <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">Error: {error}</div>
             ) : (
-                <pre>{JSON.stringify(res, null, 2)}</pre>
+                <div className="items-center justify-center">
+                    <h1 className="py-10 font-bold">MoneyView Details</h1>
+                    <Table>
+                        <TableBody>
+                            {Object.entries(res)
+                                .map(
+                                    ([key, value]: any) =>
+                                        value && (
+                                            <TableRow key={key}>
+                                                <TableCell className="font-medium">{key}</TableCell>
+                                                <TableCell className="text-right">{value.toString()}</TableCell>
+                                            </TableRow>
+                                        ),
+                                )}
+
+                        </TableBody>
+                    </Table>
+                </div>
             )}
         </main>
     );
