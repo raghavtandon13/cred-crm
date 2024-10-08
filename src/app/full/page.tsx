@@ -31,7 +31,7 @@ export default function Full({ searchParams }: FullProps) {
                 </Button>
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />
             </div>
-            <Search phone="" />
+            <Search phone="" mv={false} />
             <h1 className="flex flex-col items-start py-5 text-2xl font-bold sm:flex-row sm:items-center">
                 <TooltipProvider>
                     <Tooltip>
