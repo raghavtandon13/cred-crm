@@ -41,7 +41,7 @@ export default async function Phone({ params }: { params: { phone: string } }) {
                 </div>
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />
             </div>
-            <Search phone={phone} />
+            <Search phone={phone} mv={false} />
             {res.accounts && res.details ? (
                 <>
                     <div className="items-center justify-center">

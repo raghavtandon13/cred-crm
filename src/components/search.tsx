@@ -2,11 +2,14 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-export default function Search({ phone }: { phone: string }) {
-
+export default function Search({ phone, mv }: { phone: string; mv: boolean }) {
     const handleSubmit = (e: any) => {
         e.preventDefault();
         const phoneNumber = e.target[0].value;
+        if (mv === true) {
+            window.location.href = `/mv/${phoneNumber}`;
+            return;
+        }
         window.location.href = `/${phoneNumber}`;
     };
 

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import User from '@/lib/models/user.model';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import Search from '@/components/search';
 
 async function findMoneyViewId(phone: string): Promise<any> {
     try {
@@ -9,14 +10,14 @@ async function findMoneyViewId(phone: string): Promise<any> {
         console.log(user);
         if (!user || !user.accounts) {
             console.log('User or user accounts not found');
-            return null;
+            throw new Error('User or user accounts not found');
         }
 
         const moneyViewAccount = user.accounts.find((account: any) => account.name === 'MoneyView');
         console.log(moneyViewAccount);
         if (!moneyViewAccount) {
             console.log('MoneyView account not found');
-            return null;
+            throw new Error('MoneyView account not found');
         }
 
         const tokenResponse = await fetch('https://atlas.whizdm.com/atlas/v1/token', {
@@ -83,6 +84,7 @@ export default async function Phone({ params }: { params: { phone: string } }) {
                 </a>
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />
             </div>
+            <Search phone={phone} mv={true} />
             {error ? (
                 <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">Error: {error}</div>
             ) : (
@@ -90,17 +92,15 @@ export default async function Phone({ params }: { params: { phone: string } }) {
                     <h1 className="py-10 font-bold">MoneyView Details</h1>
                     <Table>
                         <TableBody>
-                            {Object.entries(res)
-                                .map(
-                                    ([key, value]: any) =>
-                                        value && (
-                                            <TableRow key={key}>
-                                                <TableCell className="font-medium">{key}</TableCell>
-                                                <TableCell className="text-right">{value.toString()}</TableCell>
-                                            </TableRow>
-                                        ),
-                                )}
-
+                            {Object.entries(res).map(
+                                ([key, value]: any) =>
+                                    value && (
+                                        <TableRow key={key}>
+                                            <TableCell className="font-medium">{key}</TableCell>
+                                            <TableCell className="text-right">{value.toString()}</TableCell>
+                                        </TableRow>
+                                    ),
+                            )}
                         </TableBody>
                     </Table>
                 </div>
