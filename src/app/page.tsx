@@ -18,14 +18,14 @@ export default async function Home(searchParams: any) {
     return (
         <main className="flex min-h-screen flex-col items-stretch p-10 px-5 md:p-20 md:px-40">
             <div className="flex h-20 w-full items-end justify-between">
-                    <Button asChild className="ml-[-1rem] text-2xl font-bold" variant={'link'}>
-                        <Link href="/" className="text-2xl font-bold">
-                            DATABASE
-                        </Link>
-                    </Button>
+                <Button asChild className="ml-[-1rem] text-2xl font-bold" variant={'link'}>
+                    <Link href="/" className="text-2xl font-bold">
+                        DATABASE
+                    </Link>
+                </Button>
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />
             </div>
-            <Search phone="" />
+            <Search phone="" mv={false} />
             <h1 className="flex flex-col items-start py-5 text-2xl font-bold sm:flex-row sm:items-center">
                 <TooltipProvider>
                     <Tooltip>
