@@ -2,7 +2,8 @@ import Image from 'next/image';
 import User from '@/lib/models/user.model';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import Search from '@/components/search';
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store';
 
 async function findMoneyViewId(phone: string): Promise<any> {
     try {
