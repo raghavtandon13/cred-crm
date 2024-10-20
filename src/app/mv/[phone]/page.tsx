@@ -92,6 +92,43 @@ async function mpkt_status(user: any): Promise<any> {
     return mpktStatusData.data;
 }
 
+async function cashe_status(user: any): Promise<any> {
+    if (!user || !user.accounts) return { error: 'User or user accounts not found' };
+    const casheAccount = user.accounts.find((account: any) => account.name === 'Cashe');
+    if (!casheAccount) return { error: 'Cashe account not found' };
+    const casheRes = await fetch('https://credmantra.com/api/v1/partner-api/cashe/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            partner_name: 'CredMantra_Partner1',
+            partner_customer_id: casheAccount.id,
+        }),
+    });
+    if (!casheRes.ok) {
+        const errorData = await casheRes.json();
+        return { error2: errorData };
+    }
+    const casheStatusData = await casheRes.json();
+    return casheStatusData;
+}
+
+async function fibe_status(user: any): Promise<any> {
+    if (!user || !user.accounts) return { error: 'User or user accounts not found' };
+    const fibeAccount = user.accounts.find((account: any) => account.name === 'Fibe');
+    if (!fibeAccount) return { error: 'Fibe account not found' };
+    const fibeRes = await fetch('https://credmantra.com/api/v1/partner-api/fibe/customer-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ custRefNo: fibeAccount.res.esRefId }),
+    });
+    if (!fibeRes.ok) {
+        const errorData = await fibeRes.json();
+        return { error2: errorData };
+    }
+    const fibeStatusData = await fibeRes.json();
+    return fibeStatusData;
+}
+
 async function moneytap_status(user: any): Promise<any> {
     if (!user || !user.accounts) return { error: 'User or user accounts not found' };
     const moneytapAccount = user.accounts.find((account: any) => account.name === 'MoneyTap');
@@ -115,13 +152,22 @@ async function moneytap_status(user: any): Promise<any> {
 
 async function get_status(user: any): Promise<any> {
     try {
-        const statusFunctions = [mv_status(user), ramfin_status(user.phone), mpkt_status(user), moneytap_status(user)];
+        const statusFunctions = [
+            mv_status(user),
+            ramfin_status(user.phone),
+            mpkt_status(user),
+            moneytap_status(user),
+            fibe_status(user),
+            cashe_status(user),
+        ];
         const results = await Promise.all(statusFunctions);
         return {
             MoneyView: results[0],
             RamFin: results[1],
             Mpocket: results[2],
             MoneyTap: results[3],
+            Fibe: results[4],
+            Cashe: results[5],
         };
     } catch (error) {
         console.error('Error in get_status:', error);
