@@ -84,6 +84,11 @@ async function mpkt_status(user: any): Promise<any> {
         return { error2: errorData };
     }
     const mpktStatusData = await mpktRes.json();
+    console.log('mpktStatusData');
+    console.log(mpktStatusData);
+    if (mpktStatusData.data === undefined) {
+        return { error: 'No Data' };
+    }
     return mpktStatusData.data;
 }
 
@@ -131,6 +136,8 @@ export default async function Phone({ params }: { params: { phone: string } }) {
     const userArray = await User.find({ phone: phone });
     const user = userArray[0];
     const res = await get_status(user);
+    console.log('main res');
+    console.log(res);
 
     return (
         <main className="flex min-h-screen flex-col items-stretch p-10 px-5 md:p-20 md:px-40">
