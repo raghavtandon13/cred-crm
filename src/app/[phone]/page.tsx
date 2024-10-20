@@ -36,7 +36,7 @@ export default async function Phone({ params }: { params: { phone: string } }) {
                     </a>
 
                     <a href={`/mv/${phone}`} className="ml-10 pointer text-sm font-bold">
-                        MV STATUS -&gt;
+                        STATUS -&gt;
                     </a>
                 </div>
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />

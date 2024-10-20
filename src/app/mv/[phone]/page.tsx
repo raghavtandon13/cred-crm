@@ -1,42 +1,31 @@
+/* 
+1. MoneyView
+2. RamFin
+3. Mpocket 
+4. MoneyTap
+*/
+
 import Image from 'next/image';
 import User from '@/lib/models/user.model';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import Search from '@/components/search';
-// export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store';
 
-async function findMoneyViewId(phone: string): Promise<any> {
+async function mv_status(user: any): Promise<any> {
     try {
-        const userArray = await User.find({ phone: phone });
-        const user = userArray[0];
-        console.log(user);
-        if (!user || !user.accounts) {
-            console.log('User or user accounts not found');
-            throw new Error('User or user accounts not found');
-        }
-
+        if (!user || !user.accounts) return { error: 'User or user accounts not found' };
         const moneyViewAccount = user.accounts.find((account: any) => account.name === 'MoneyView');
-        console.log(moneyViewAccount);
-        if (!moneyViewAccount) {
-            console.log('MoneyView account not found');
-            throw new Error('MoneyView account not found');
-        }
+        if (!moneyViewAccount) return { error: 'MoneyView account not found' };
 
         const tokenResponse = await fetch('https://atlas.whizdm.com/atlas/v1/token', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                partnerCode: 158,
-                userName: 'credmantra',
-                password: 'p-wWj6.13M',
-            }),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ partnerCode: 158, userName: 'credmantra', password: 'p-wWj6.13M' }),
         });
 
         if (!tokenResponse.ok) {
             const errorText = await tokenResponse.text();
-            throw new Error(`Failed to fetch token: ${tokenResponse.status} ${tokenResponse.statusText}. ${errorText}`);
+            return { error: `Failed to fetch token: ${tokenResponse.status} ${tokenResponse.statusText}. ${errorText}` };
         }
 
         const tokenData = await tokenResponse.json();
@@ -51,32 +40,97 @@ async function findMoneyViewId(phone: string): Promise<any> {
 
         if (!leadStatusResponse.ok) {
             const errorText = await leadStatusResponse.text();
-            throw new Error(`Failed to fetch lead status: ${leadStatusResponse.status} ${leadStatusResponse.statusText}. ${errorText}`);
+            return { error: `Failed to fetch lead status: ${leadStatusResponse.status} ${leadStatusResponse.statusText}. ${errorText}` };
         }
 
         const leadStatusData = await leadStatusResponse.json();
-        console.log('Lead status data:', leadStatusData);
         return leadStatusData;
     } catch (error) {
-        console.error('Error in findMoneyViewId:', error);
-        throw error; // Re-throw the error to be handled by the caller
+        console.error('Error in mv_status:', error);
+        return { error: 'Error in mv_status' };
+    }
+}
+
+async function ramfin_status(phone: string): Promise<any> {
+    try {
+        const scResponse = await fetch('https://credmantra.com/api/v1/partner-api/ram/status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobile: phone }),
+        });
+        if (!scResponse.ok) {
+            const errorData = await scResponse.json();
+            return { error: errorData.msg };
+        }
+        const scStatusData = await scResponse.json();
+        return scStatusData;
+    } catch (error) {
+        return { error: 'Error in smartcoin_status' };
+    }
+}
+
+async function mpkt_status(user: any): Promise<any> {
+    if (!user || !user.accounts) return { error: 'User or user accounts not found' };
+    const mpktAccount = user.accounts.find((account: any) => account.name === 'Mpocket');
+    if (!mpktAccount) return { error: 'Mpokket account not found' };
+
+    const mpktRes = await fetch('http://13.201.83.62/api/v1/mpocket/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ request_id: mpktAccount.data.requestId }),
+    });
+    if (!mpktRes.ok) {
+        const errorData = await mpktRes.json();
+        return { error2: errorData };
+    }
+    const mpktStatusData = await mpktRes.json();
+    return mpktStatusData.data;
+}
+
+async function moneytap_status(user: any): Promise<any> {
+    if (!user || !user.accounts) return { error: 'User or user accounts not found' };
+    const moneytapAccount = user.accounts.find((account: any) => account.name === 'MoneyTap');
+    if (!moneytapAccount) return { error: 'Moneytap account not found' };
+
+    const moneytapRes = await fetch('https://credmantra.com/api/v1/partner-api/moneytap/moneytap/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            customerId: moneytapAccount.customerId,
+            phone: user.phone,
+        }),
+    });
+    if (!moneytapRes.ok) {
+        const errorData = await moneytapRes.json();
+        return { error2: errorData };
+    }
+    const moneytapStatusData = await moneytapRes.json();
+    return moneytapStatusData;
+}
+
+async function get_status(user: any): Promise<any> {
+    try {
+        const statusFunctions = [mv_status(user), ramfin_status(user.phone), mpkt_status(user), moneytap_status(user)];
+        const results = await Promise.all(statusFunctions);
+        return {
+            MoneyView: results[0],
+            RamFin: results[1],
+            Mpocket: results[2],
+            MoneyTap: results[3],
+        };
+    } catch (error) {
+        console.error('Error in get_status:', error);
+        throw error;
     }
 }
 
 export default async function Phone({ params }: { params: { phone: string } }) {
+    // SETUP
     let phone = '';
-    let res = null;
-    let error = null;
-
-    if (params.phone) {
-        phone = params.phone.toString();
-    }
-
-    try {
-        res = await findMoneyViewId(phone);
-    } catch (err) {
-        error = err instanceof Error ? err.message : String(err);
-    }
+    if (params.phone) phone = params.phone.toString();
+    const userArray = await User.find({ phone: phone });
+    const user = userArray[0];
+    const res = await get_status(user);
 
     return (
         <main className="flex min-h-screen flex-col items-stretch p-10 px-5 md:p-20 md:px-40">
@@ -87,26 +141,30 @@ export default async function Phone({ params }: { params: { phone: string } }) {
                 <Image className="rounded" src="/cred.svg" alt="Credmantra Logo" width={150} height={36} priority />
             </div>
             <Search phone={phone} mv={true} />
-            {error ? (
-                <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">Error: {error}</div>
-            ) : (
-                <div className="items-center justify-center">
-                    <h1 className="py-10 font-bold">MoneyView Details</h1>
-                    <Table>
-                        <TableBody>
-                            {Object.entries(res).map(
-                                ([key, value]: any) =>
-                                    value && (
-                                        <TableRow key={key}>
-                                            <TableCell className="font-medium">{key}</TableCell>
-                                            <TableCell className="text-right">{value.toString()}</TableCell>
-                                        </TableRow>
-                                    ),
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-            )}
+            <div className="items-center justify-center">
+                <h1 className="py-10 font-bold">User Status</h1>
+                {Object.entries(res).map(([lender, status]: any) => (
+                    <div
+                        className={`flex flex-col border border-gray p-2 my-2 rounded ${status.error === undefined ? '' : 'bg-red-100 border-red-400 text-red-700'}`}
+                        key={lender}
+                    >
+                        <h1 className="text-l w-full font-semibold">{lender}</h1>
+                        <Table>
+                            <TableBody>
+                                {Object.entries(status).map(
+                                    ([key, value]: any) =>
+                                        value && (
+                                            <TableRow className="flex justify-between" key={key}>
+                                                <TableCell className="font-medium">{key}</TableCell>
+                                                <TableCell className="text-right">{value.toString()}</TableCell>
+                                            </TableRow>
+                                        ),
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                ))}
+            </div>
         </main>
     );
 }
