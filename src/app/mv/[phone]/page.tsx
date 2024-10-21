@@ -154,20 +154,20 @@ async function get_status(user: any): Promise<any> {
     try {
         const statusFunctions = [
             mv_status(user),
-            // ramfin_status(user.phone),
+            ramfin_status(user.phone),
+            moneytap_status(user),
+            fibe_status(user),
+            cashe_status(user),
             // mpkt_status(user),
-            // moneytap_status(user),
-            // fibe_status(user),
-            // cashe_status(user),
         ];
         const results = await Promise.all(statusFunctions);
         return {
             MoneyView: results[0],
-            // RamFin: results[1],
-            // Mpocket: results[2],
-            // MoneyTap: results[3],
-            // Fibe: results[4],
-            // Cashe: results[5],
+            RamFin: results[1],
+            MoneyTap: results[2],
+            Fibe: results[3],
+            Cashe: results[4],
+            // Mpocket: results[5],
         };
     } catch (error) {
         console.error('Error in get_status:', error);
